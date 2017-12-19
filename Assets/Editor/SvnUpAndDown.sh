@@ -1,6 +1,6 @@
 #!/bin/sh
 path=${1}
-downPath==${2}
+downPath=${2}
 
 echo Svn UP and Down Log here!
 echo "upload ab path:"${path}
