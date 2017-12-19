@@ -1,0 +1,50 @@
+mac：自带svnserve 和svn
+一.服务器
+1.创建svn仓库
+hyzdeMac-mini:~ hyz$ svnadmin create /Users/hyz/Documents/WebServer/AssetBundles
+其中后边路径是自定义的，最后/之后AssetBundles是版本库名称
+2.配置svn 用户权限（conf目录下的三个文件）
+1>打开svnserve.conf，将下列配置项前面的#和空格都去掉(空格一定要去掉，否则失败)
+# anon-access = read  
+# auth-access = write  
+  
+# password-db = passwd  
+  
+# authz-db = authz 
+2>打开passwd，在[users]下面添加帐号和密码
+[users]  
+mj = 123  
+jj = 456  
+帐号是mj，密码是123
+3>打开authz，配置用户组和权限
+[groups]  
+topgroup=mj,jj  
+说明mj和jj都是属于topgroup这个组的，接下来再进行权限配置。
+4>给组加权限
+[/]  
+@topgroup = rw  
+上面的配置说明topgroup这个组中的所有用户对所有资源库都有读写(rw)权限，组名前面要用@
+如果是用户名，不用加@，比如mj这个用户有读写权限
+[/]  
+mj = rw
+3.启动svn服务器
+svnserve -d -r /Users/hyz/Documents/WebServer/AssetBundles
+如果是版本库名 则svn://localhost代表当前版本库，通过网络访问直接输入svn://localhost即可，只有当前一个库启动并且能用
+svnserve -d -r /Users/hyz/Documents/WebServer（常用）
+如果是版本库名上层目录，则svn://localhost代表上层目录，访问时需要加库名svn://localhost/AssetBundles访问，启动上层，所有版本库都能访问
+4.关闭svn（在应用程序--》实用工具--》活动监视器，）最有效的办法是打开实用工具里面的“活动监视器” 杀掉svnserve即可。
+二。客户端
+1.客户端第一次导入
+hyzdeMac-mini:~ hyz$ svn import /Users/hyz/Desktop/AndroidG01 svn://localhost/Android --username=hyz --password=123456 -m "first import"
+导入的是文件，svn://localhost/Android的Android就是文件，是文件夹Android就是文件夹
+2.客户端检出
+hyzdeMac-mini:~ hyz$ svn checkout svn://localhost/AssetBundles --username=hyz --password=123456 /Users/hyz/Documents/WebServer/LoadSvn
+以下需要到本地拉下来的svn库下：
+3.客户端add所有
+hyzdeMac-mini:LoadSvn hyz$ svn add . --no-ignore --force
+4.客户端更新
+hyzdeMac-mini:LoadSvn hyz$ svn update
+5.客户端提交
+hyzdeMac-mini:LoadSvn hyz$ svn commit -m "updatetext"
+6.查看svn服务器信息
+hyzdeMac-mini:LoadSvn hyz$ svn info
