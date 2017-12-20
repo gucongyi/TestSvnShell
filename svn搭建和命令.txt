@@ -1,4 +1,4 @@
-mac：自带svnserve 和svn
+﻿mac：自带svnserve 和svn
 一.服务器
 1.创建svn仓库
 hyzdeMac-mini:~ hyz$ svnadmin create /Users/hyz/Documents/WebServer/AssetBundles
@@ -41,6 +41,9 @@ hyzdeMac-mini:~ hyz$ svn import /Users/hyz/Desktop/AndroidG01 svn://localhost/An
 hyzdeMac-mini:~ hyz$ svn checkout svn://localhost/AssetBundles --username=hyz --password=123456 /Users/hyz/Documents/WebServer/LoadSvn
 以下需要到本地拉下来的svn库下：
 3.客户端add所有
+1>增加除去忽略了的
+hyzdeMac-mini:LoadSvn hyz$ svn add . --force
+2>增加所有的，包括忽略的（这种不要用，否则冲突不好解决）
 hyzdeMac-mini:LoadSvn hyz$ svn add . --no-ignore --force
 4.客户端更新
 hyzdeMac-mini:LoadSvn hyz$ svn update
@@ -48,3 +51,15 @@ hyzdeMac-mini:LoadSvn hyz$ svn update
 hyzdeMac-mini:LoadSvn hyz$ svn commit -m "updatetext"
 6.查看svn服务器信息
 hyzdeMac-mini:LoadSvn hyz$ svn info
+7.svn 忽略文件
+1> cd到 ~/.subversion(固定的)
+2>修改config文件
+open ./
+打开config文件
+去掉global-ignores = *.o *.lo *.la #*# .*.rej *.rej .*~ *~ .#* .DS_Store ._* *.log *.bak node_modules 之前的#，让其有作用。
+8.查看隐藏文件
+sudo ls
+9.删除文件
+rm -rf .DS_Store
+10.svn回滚文件，放弃没有提交的文件，从而解决冲突
+svn revert .DS_Store
