@@ -63,3 +63,8 @@ sudo ls
 rm -rf .DS_Store
 10.svn回滚文件，放弃没有提交的文件，从而解决冲突
 svn revert .DS_Store
+11.win7的svn客户端查看日志时，出现：there has been a problem contacting the server
+解决 方案 ：可行的(by gcy)
+svnserve.conf
+中必须是
+anon-access = none
